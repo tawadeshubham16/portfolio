@@ -28,6 +28,7 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 - Tailwind CSS (via `@tailwindcss/postcss`)
 - JavaScript modules with `jsconfig.json` path aliases
 - Dockerized runtime via multi-stage `Dockerfile`
+- Automated Docker builds via GitHub Actions
 
 ## Docker
 
@@ -37,6 +38,10 @@ Build the production image and run a container:
 docker build -t portfolio .
 docker run -p 3000:3000 portfolio
 ```
+
+## CI/CD
+
+A GitHub Actions workflow (`.github/workflows/docker-publish.yml`) builds the Docker image and pushes `tawadeshubham16/portfolio:latest` on pushes to `main`. Add `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` secrets in your repository settings before triggering the workflow.
 
 ## Learn More
 
