@@ -27,6 +27,16 @@ This project uses [`next/font`](https://nextjs.org/docs/app/building-your-applic
 - Next.js App Router
 - Tailwind CSS (via `@tailwindcss/postcss`)
 - JavaScript modules with `jsconfig.json` path aliases
+- Dockerized runtime via multi-stage `Dockerfile`
+
+## Docker
+
+Build the production image and run a container:
+
+```bash
+docker build -t portfolio .
+docker run -p 3000:3000 portfolio
+```
 
 ## Learn More
 
