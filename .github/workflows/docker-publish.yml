@@ -1,4 +1,4 @@
-name: Build and Push Docker Image
+name: Build, Push, and Deploy
 
 on:
   push:
@@ -10,6 +10,10 @@ jobs:
   publish:
     name: Build and push to Docker Hub
     runs-on: ubuntu-latest
+    env:
+      DOCKER_IMAGE: tawadeshubham16/portfolio
+      STACK_NAME: portfolio
+      REMOTE_STACK_PATH: /home/${{ secrets.DEPLOY_USER }}/website-stack.yml
 
     steps:
       - name: Checkout repository
@@ -30,4 +34,18 @@ jobs:
           context: .
           file: ./Dockerfile
           push: true
-          tags: tawadeshubham16/portfolio:latest
+          tags: |
+            ${{ env.DOCKER_IMAGE }}:latest
+            ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+
+      - name: Redeploy Docker Swarm stack
+        uses: appleboy/ssh-action@v0.1.10
+        with:
+          host: ${{ secrets.DEPLOY_HOST }}
+          username: ${{ secrets.DEPLOY_USER }}
+          key: ${{ secrets.DEPLOY_SSH_KEY }}
+          script: |
+            set -eu
+            echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
+            docker pull "${{ env.DOCKER_IMAGE }}:latest"
+            docker stack deploy --with-registry-auth -c "${{ env.REMOTE_STACK_PATH }}" "${{ env.STACK_NAME }}"

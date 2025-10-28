@@ -41,7 +41,10 @@ docker run -p 3000:3000 portfolio
 
 ## CI/CD
 
-A GitHub Actions workflow (`.github/workflows/docker-publish.yml`) builds the Docker image and pushes `tawadeshubham16/portfolio:latest` on pushes to `main`. Add `DOCKERHUB_USERNAME` and `DOCKERHUB_TOKEN` secrets in your repository settings before triggering the workflow.
+A GitHub Actions workflow (`.github/workflows/docker-publish.yml`) builds the Docker image, pushes `tawadeshubham16/portfolio:latest`. Add the following repository secrets before triggering the workflow:
+
+- `DOCKERHUB_USERNAME`
+- `DOCKERHUB_TOKEN`
 
 ## Learn More
 
