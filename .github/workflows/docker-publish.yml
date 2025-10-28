@@ -13,7 +13,7 @@ jobs:
     env:
       DOCKER_IMAGE: tawadeshubham16/portfolio
       STACK_NAME: portfolio
-      REMOTE_STACK_PATH: /home/${{ secrets.DEPLOY_USER }}/website-stack.yml
+      REMOTE_STACK_PATH: /home/${{ secrets.DEPLOY_USER }}/deploy/infra/swarm/website-stack.yml
 
     steps:
       - name: Checkout repository
