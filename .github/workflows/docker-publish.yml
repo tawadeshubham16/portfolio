@@ -14,6 +14,7 @@ jobs:
       DOCKER_IMAGE: tawadeshubham16/portfolio
       STACK_NAME: portfolio
       REMOTE_STACK_PATH: /home/${{ secrets.DEPLOY_USER }}/deploy/infra/swarm/website-stack.yml
+      IMAGE_TAG: ${{ github.sha }}
 
     steps:
       - name: Checkout repository
@@ -36,7 +37,7 @@ jobs:
           push: true
           tags: |
             ${{ env.DOCKER_IMAGE }}:latest
-            ${{ env.DOCKER_IMAGE }}:${{ github.sha }}
+            ${{ env.DOCKER_IMAGE }}:${{ env.IMAGE_TAG }}
 
       - name: Redeploy Docker Swarm stack
         uses: appleboy/ssh-action@v0.1.10
@@ -48,5 +49,6 @@ jobs:
           script: |
             set -eu
             echo "${{ secrets.DOCKERHUB_TOKEN }}" | docker login --username "${{ secrets.DOCKERHUB_USERNAME }}" --password-stdin
-            docker pull "${{ env.DOCKER_IMAGE }}:latest"
+            docker pull "${{ env.DOCKER_IMAGE }}:${{ env.IMAGE_TAG }}"
+            export WEBSITE_IMAGE_TAG="${{ env.IMAGE_TAG }}"
             docker stack deploy --with-registry-auth -c "${{ env.REMOTE_STACK_PATH }}" "${{ env.STACK_NAME }}"
